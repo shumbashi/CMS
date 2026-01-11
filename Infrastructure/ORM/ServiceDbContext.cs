@@ -35,7 +35,10 @@ namespace Infrastructure.ORM
 		public DbSet<Notification> Notifications { get; set; }  // جدول التنبيهات
 		public DbSet<ContractPartyInDocument> ContractPartyInDocuments { get; set; }  // جدول الأطراف في الوثائق
 		public DbSet<TemplateField> TemplateFields { get; set; }  // جدول حقول القالب
-		public DbSet<DocumentFieldData> DocumentFieldData { get; set; }  // جدول بيانات الوثيقة
+		public DbSet<Identity> Identities { get; set; }  
+		public DbSet<Company> Companies { get; set; }  
+		public DbSet<PartyRole> PartyRoles { get; set; }  
+
 
 
 

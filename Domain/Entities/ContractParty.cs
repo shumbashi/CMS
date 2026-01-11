@@ -7,23 +7,15 @@ namespace Domain.Entities
 {
 	public class ContractParty : BaseEntity, IAggregateRoot
 	{
-		
-
-		public string ContractPartyType { get; set; }  // نوع الطرف
-		public string ContractPartyName { get; set; }  // اسم الطرف
-
-		public string Representative { get; set; }  // الممثل أو النائب
-
-		public string Nationality { get; set; }  // الجنسية
-
-		public string PhoneNumber { get; set; }  // رقم الهاتف (NOT NULL)
-
+		public string ContractPartyName { get; set; }  // اسم الشخص في الطرف
 		public string Residence { get; set; }  // محل الإقامة (NOT NULL)
 
-		public DateTime BirthDate { get; set; }  // تاريخ الميلاد
+		// علاقة متعدد إلى متعدد مع الوثائق عبر جدول ContractPartyInDocument
+		public ICollection<ContractPartyInDocument> ContractPartyInDocuments { get; set; }  // علاقة مع الوثائق عبر جدول مساعد
 
-		public string NationalId { get; set; }  // الرقم الوطني / التجاري
+		// علاقة متعدد إلى متعدد مع الشركات
+		public ICollection<PersonsInCompany> PersonsInCompany { get; set; }  // العلاقة مع الأشخاص في الشركة
 
-		public string IdentityProof { get; set; }  // إثبات الهوية
+
 	}
 }

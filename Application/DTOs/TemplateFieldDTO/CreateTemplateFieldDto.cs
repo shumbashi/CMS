@@ -1,13 +1,12 @@
-﻿using Domain.Common;
+﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities
+namespace Application.DTOs.TemplateFieldDTO
 {
-	public class TemplateField : BaseEntity, IAggregateRoot
-	{
-		
+    public class CreateTemplateFieldDto
+    {
 		public Template Template { get; set; }  // العلاقة مع القالب
 
 		public string FieldName { get; set; }  // اسم الحقل (Primary Key)

@@ -1,13 +1,11 @@
-﻿using Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities
+namespace Application.DTOs.EditorDTO
 {
-	public class Editor : BaseEntity , IAggregateRoot
-	{
-
+    public class CreateEditorDto
+    {
 		public string InspectionNumber { get; set; }  // رقم قيد التفتيش
 
 		public string SealNumber { get; set; }  // رقم الختم الإلكتروني
@@ -16,13 +14,12 @@ namespace Domain.Entities
 
 		public string CourtDivision { get; set; }  // دائرة المحكمة
 
+		public DateTime BirthDate { get; set; }  // تاريخ الميلاد
+
 		public decimal FinancialBalance { get; set; }  // الرصيد المالي
 
-		public ICollection<Document> Documents { get; set; }  // علاقة متعددة إلى متعددة
+		public decimal Length { get; set; }  // الطول
 
-		 // العلاقة العكسية مع User
-		public Guid UserId { get; set; }
-		public User User { get; set; }  // العلاقة مع المستخدم
-		
+		public decimal Width { get; set; }  // العرض
 	}
 }

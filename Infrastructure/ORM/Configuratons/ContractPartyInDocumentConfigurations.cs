@@ -13,9 +13,28 @@ namespace Infrastructure.ORM.Configuratons
 		{
 			builder.HasKey(c => c.Id);  // المفتاح الأساسي
 
-			builder.Property(c => c.ContractPartyRole)
+			builder.Property(c => c.ContractPartyName)
 				.IsRequired()
-				.HasMaxLength(50);
+				.HasMaxLength(100);  // تحديد طول الحقل ContractPartyName إلى 100
+
+			
+			builder.Property(c => c.PartyRoleId)
+				.IsRequired();  // تأكد من أن PartyRoleId مطلوب
+
+			// إضافة العلاقات مع جداول الأطراف (ContractParty و Document)
+			builder.HasOne(cpd => cpd.ContractParty)
+				.WithMany(cp => cp.ContractPartyInDocuments)
+				.HasForeignKey(cpd => cpd.ContractPartyId);  // المفتاح الخارجي ContractPartyId
+
+			builder.HasOne(cpd => cpd.Document)
+				.WithMany(d => d.ContractPartyInDocuments)
+				.HasForeignKey(cpd => cpd.DocumentId);  // المفتاح الخارجي DocumentId
+
+			builder.HasOne(cpd => cpd.PartyRole)
+				.WithMany()  // لا حاجة لعلاقة عكسية في هذا السياق
+				.HasForeignKey(cpd => cpd.PartyRoleId);  // المفتاح الخارجي PartyRoleId
 		}
 	}
+
+
 }

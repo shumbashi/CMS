@@ -15,12 +15,17 @@ namespace Domain.Entities
 
 		public string Password { get; set; }  // كلمة المرور
 
-		public bool Active { get; set; }  // حالة النشاط (نشط أو غير نشط)
-
 		public string Phone { get; set; }  // رقم الهاتف
 
-		public int NationalNumber { get; set; }  // الرقم الوطني
+		// العلاقة مع المحرر (Editor)
+		public Guid? EditorId { get; set; }  // اختيارية، إذا كان المستخدم محررًا
+		public Editor Editor { get; set; }  // إذا كان المستخدم محررًا
+		public ICollection<Identity> Identities { get; set; }
 
-		
+		public ICollection<UserRole> UserRoles { get; set; }  // علاقة متعدد إلى واحد مع UserRole
+
+		// العلاقة مع الأنشطة
+		public ICollection<UserActivity> UserActivities { get; set; }
+
 	}
 }

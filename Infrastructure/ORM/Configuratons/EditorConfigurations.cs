@@ -29,20 +29,10 @@ namespace Infrastructure.ORM.Configuratons
 				.IsRequired()
 				.HasMaxLength(50);
 
-			builder.Property(e => e.BirthDate)
-				.IsRequired();
-
 			builder.Property(e => e.FinancialBalance)
 				.IsRequired()
 				.HasColumnType("decimal(15,2)");
 
-			builder.Property(e => e.Length)
-				.IsRequired()
-				.HasColumnType("decimal(15,2)");
-
-			builder.Property(e => e.Width)
-				.IsRequired()
-				.HasColumnType("decimal(15,2)");
 		}
 	}
 }

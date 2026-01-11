@@ -1,48 +1,29 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Infrastructure.ORM.Configuratons
+public class ContractPartyConfigurations : IEntityTypeConfiguration<ContractParty>
 {
-	public class ContractPartyConfigurations : IEntityTypeConfiguration<ContractParty>
+	public void Configure(EntityTypeBuilder<ContractParty> builder)
 	{
-		public void Configure(EntityTypeBuilder<ContractParty> builder)
-		{
-			builder.HasKey(c => c.Id);  // المفتاح الأساسي
+		builder.HasKey(c => c.Id);  // المفتاح الأساسي
 
-			builder.Property(c => c.ContractPartyType)
-				.IsRequired()
-				.HasMaxLength(50);
+		builder.Property(c => c.ContractPartyName)
+			.IsRequired()
+			.HasMaxLength(100);  // تحديد طول الحقل ContractPartyName إلى 100
 
-			builder.Property(c => c.ContractPartyName)
-				.IsRequired()
-				.HasMaxLength(50);
+		builder.Property(c => c.Residence)
+			.IsRequired()
+			.HasMaxLength(100);  // تحديد طول الحقل Residence إلى 100
 
-			builder.Property(c => c.Representative)
-				.HasMaxLength(50);
+		// العلاقة مع جدول ContractPartyInDocument (متعدد إلى متعدد)
+		builder.HasMany(c => c.ContractPartyInDocuments)
+			.WithOne(cpd => cpd.ContractParty)
+			.HasForeignKey(cpd => cpd.ContractPartyId);  // المفتاح الخارجي ContractPartyId
 
-			builder.Property(c => c.Nationality)
-				.HasMaxLength(50);
-
-			builder.Property(c => c.PhoneNumber)
-				.IsRequired()
-				.HasMaxLength(50);
-
-			builder.Property(c => c.Residence)
-				.IsRequired()
-				.HasMaxLength(50);
-
-			builder.Property(c => c.BirthDate)
-				.IsRequired();
-
-			builder.Property(c => c.NationalId)
-				.HasMaxLength(50);
-
-			builder.Property(c => c.IdentityProof)
-				.HasMaxLength(50);
-		}
+		// العلاقة مع جدول PersonsInCompany (متعدد إلى متعدد عبر جدول وسيط)
+		builder.HasMany(c => c.PersonsInCompany)
+			.WithOne(p => p.ContractParty)
+			.HasForeignKey(p => p.ContractPartyId);  // المفتاح الخارجي ContractPartyId في الجدول الوسيط
 	}
 }

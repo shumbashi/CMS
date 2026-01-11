@@ -11,10 +11,8 @@ namespace Infrastructure.ORM.Configuratons
 	{
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
-			// تعيين المفتاح الأساسي
-			builder.HasKey(u => u.Id);  // استخدام `Id` من `BaseEntity` كـ Primary Key
+			builder.HasKey(u => u.Id);  // المفتاح الأساسي
 
-			// تخصيص الأعمدة الخاصة بـ User إذا لزم الأمر
 			builder.Property(u => u.Name)
 				.IsRequired()
 				.HasMaxLength(50);  // تحديد طول الحقل Name إلى 50
@@ -31,10 +29,21 @@ namespace Infrastructure.ORM.Configuratons
 				.IsRequired()
 				.HasMaxLength(50);  // تحديد طول الحقل Phone إلى 50
 
-			builder.Property(u => u.NationalNumber)
-				.IsRequired();  // الرقم الوطني يجب أن يكون مطلوبًا
+			// إضافة علاقة مع المحرر (Editor)
+			builder.HasOne(u => u.Editor)
+				.WithMany()  // لا حاجة لعلاقة عكسية هنا في هذه الحالة
+				.HasForeignKey(u => u.EditorId);  // المفتاح الخارجي EditorId
 
-			// يمكن تخصيص المزيد من الأعمدة بناءً على احتياجاتك
+			// إضافة علاقة مع جدول UserRoles
+			builder.HasMany(u => u.UserRoles)
+				.WithOne(ur => ur.User)
+				.HasForeignKey(ur => ur.UserId);  // المفتاح الخارجي UserId
+
+			// إضافة علاقة مع جدول UserActivities
+			builder.HasMany(u => u.UserActivities)
+				.WithOne()
+				.HasForeignKey(ua => ua.UserId);  // المفتاح الخارجي UserId في جدول الأنشطة
 		}
 	}
+
 }
