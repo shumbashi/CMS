@@ -8,8 +8,7 @@ using System.Text;
 
 namespace Infrastructure.Repositories
 {
-	namespace Infrastructure.Repositories
-	{
+	
 		public class UserRoleRepository : Repository<UserRole>, IUserRoleRepository
 		{
 			private readonly ServiceDbContext _serviceDbContext;
@@ -23,4 +22,4 @@ namespace Infrastructure.Repositories
 		}
 	}
 
-}
+

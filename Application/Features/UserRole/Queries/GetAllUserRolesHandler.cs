@@ -20,10 +20,10 @@ namespace Application.Features.UserRole.Queries
 		private readonly IUserRoleRepository _userRoleRepository;
 		private readonly IMapper _mapper;
 
-		public GetAllUserRolesHandler(IUnitOfWork unitOfWork, IUserRoleRepository userRoleRepository, IMapper mapper)
+		public GetAllUserRolesHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
-			_userRoleRepository = _unitOfWork.UserRoleRepository;  // الحصول على الريبو من الـ UnitOfWork
+			_userRoleRepository = unitOfWork.UserRoleRepository;
 			_mapper = mapper;
 		}
 

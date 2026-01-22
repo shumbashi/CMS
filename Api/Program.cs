@@ -87,7 +87,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	});
 */
 // --------------------------- Build App ---------------------------
-var app = builder.Build();
+ذvar app = builder.Build();
 // تسجيل جميع الـ API Endpoints الخاصة بكل كائن
 app.MapUserEndpoints();      // تسجيل Endpoints الخاصة بـ User
 app.MapEditorEndpoints();    // تسجيل Endpoints الخاصة بـ Editor
