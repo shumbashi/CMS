@@ -7,6 +7,7 @@ namespace Domain.Entities
 {
 	public class PersonsInCompany : BaseEntity, IAggregateRoot
 	{
+		public string PesrsonName { get; set; }
 
 		public Guid CompanyId { get; set; }  // المفتاح الخارجي لجدول Company
 		public Company Company { get; set; }  // العلاقة مع جدول Company
@@ -16,6 +17,9 @@ namespace Domain.Entities
 
 		public Guid PartyRoleId { get; set; }  // معرف دور الطرف (Foreign Key)
 		public PartyRole PartyRole { get; set; }  // العلاقة مع دور الطرف
+
+		public Guid IdentityId { get; set; }  // المفتاح الخارجي لجدول Identity
+		public Identity Identity { get; set; }  // العلاقة مع جدول Identity
 	}
 
 }

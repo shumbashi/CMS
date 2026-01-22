@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -167,6 +167,13 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommercialRecord")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_CommercialRecord");
+
+                    b.HasIndex("CompanyName")
+                        .HasDatabaseName("UQ_CompanyName");
+
                     b.ToTable("Companies");
                 });
 
@@ -191,6 +198,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("EntityState")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("IdentityId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("longtext");
 
@@ -203,6 +213,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
 
                     b.ToTable("ContractParties");
                 });
@@ -310,7 +322,21 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthenticationNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_AuthenticationNumber");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_DocumentCode");
+
+                    b.HasIndex("DocumentStatus")
+                        .HasDatabaseName("Idx_DocumentStatus");
+
                     b.HasIndex("EditorId");
+
+                    b.HasIndex("IssueDate")
+                        .HasDatabaseName("Idx_IssueDate");
 
                     b.HasIndex("TemplateId");
 
@@ -340,11 +366,18 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("EditorName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("EntityState")
                         .HasColumnType("int");
 
                     b.Property<decimal>("FinancialBalance")
                         .HasColumnType("decimal(15,2)");
+
+                    b.Property<Guid>("IdentityId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("InspectionNumber")
                         .IsRequired()
@@ -369,6 +402,26 @@ namespace Infrastructure.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourtDivision")
+                        .HasDatabaseName("Idx_CourtDivision");
+
+                    b.HasIndex("DecisionNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_DecisionNumber");
+
+                    b.HasIndex("FinancialBalance")
+                        .HasDatabaseName("Idx_FinancialBalance");
+
+                    b.HasIndex("IdentityId");
+
+                    b.HasIndex("InspectionNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_InspectionNumber");
+
+                    b.HasIndex("SealNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_SealNumber");
 
                     b.HasIndex("UserId1");
 
@@ -434,6 +487,10 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AdministrativeNumber")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime(6)");
 
@@ -449,8 +506,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("IdentityProof")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
+                    b.Property<int>("IdentityType")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("longtext");
@@ -458,13 +518,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("NationalId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("NationalNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("NationalNumber")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
 
                     b.Property<string>("Nationality")
                         .IsRequired()
@@ -473,13 +529,28 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
+                    b.Property<string>("ResidenceNumber")
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdministrativeNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_AdministrativeNumber");
+
+                    b.HasIndex("NationalNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_NationalNumber");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_PhoneNumber");
 
                     b.HasIndex("UserId");
 
@@ -612,7 +683,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Domain.Entities.PersonsInCompany", b =>
@@ -637,6 +708,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("EntityState")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("IdentityId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("LastUpdatedBy")
                         .HasColumnType("longtext");
 
@@ -646,15 +720,21 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("PartyRoleId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("PesrsonName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("ContractPartyId");
 
+                    b.HasIndex("IdentityId");
+
                     b.HasIndex("PartyRoleId");
 
-                    b.ToTable("PersonsInCompany");
+                    b.ToTable("PersonsInCompanies");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -691,7 +771,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Domain.Entities.RolePermission", b =>
@@ -719,6 +799,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("PermissionId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("PermissionId1")
+                        .HasColumnType("char(36)");
+
                     b.Property<Guid>("RoleId")
                         .HasColumnType("char(36)");
 
@@ -726,9 +809,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PermissionId");
 
+                    b.HasIndex("PermissionId1");
+
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermission");
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Template", b =>
@@ -909,7 +994,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("UserActivity");
+                    b.ToTable("UserActivities");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -956,7 +1041,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Domain.Entities.Attachment", b =>
@@ -985,6 +1070,17 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ContractParty", b =>
+                {
+                    b.HasOne("Domain.Entities.Identity", "Identity")
+                        .WithMany("ContractParties")
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Identity");
                 });
 
             modelBuilder.Entity("Domain.Entities.ContractPartyInDocument", b =>
@@ -1035,11 +1131,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Editor", b =>
                 {
+                    b.HasOne("Domain.Entities.Identity", "Identity")
+                        .WithMany("Editors")
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Identity");
 
                     b.Navigation("User");
                 });
@@ -1110,6 +1214,12 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Identity", "Identity")
+                        .WithMany("PersonsInCompanies")
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.PartyRole", "PartyRole")
                         .WithMany()
                         .HasForeignKey("PartyRoleId")
@@ -1119,6 +1229,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("ContractParty");
+
+                    b.Navigation("Identity");
 
                     b.Navigation("PartyRole");
                 });
@@ -1130,6 +1242,10 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Permission", null)
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId1");
 
                     b.HasOne("Domain.Entities.Role", "Role")
                         .WithMany("RolePermissions")
@@ -1232,6 +1348,20 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Editor", b =>
                 {
                     b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Identity", b =>
+                {
+                    b.Navigation("ContractParties");
+
+                    b.Navigation("Editors");
+
+                    b.Navigation("PersonsInCompanies");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>

@@ -6,9 +6,10 @@ namespace Application.DTOs.ContractPartyInDocumentDTO
 {
     public class CreateContractPartyInDocumentDto
     {
-		
-		public Guid DocumentId { get; set; }  // معرف الوثيقة (Foreign Key)
 
-		public string ContractPartyRole { get; set; }  // دور الطرف (طرف في الوثيقة)
+		public string ContractPartyName { get; set; }  // اسم الطرف في الوثيقة
+		public Guid DocumentId { get; set; }  // معرف الوثيقة
+		public Guid ContractPartyId { get; set; }  // معرف الطرف
+		public Guid PartyRoleId { get; set; }  // معرف دور الطرف
 	}
 }

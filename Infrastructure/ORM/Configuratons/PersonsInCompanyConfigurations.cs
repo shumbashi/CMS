@@ -20,7 +20,11 @@ namespace Infrastructure.ORM.Configuratons
 			builder.HasOne(p => p.ContractParty)
 				.WithMany(cp => cp.PersonsInCompany)
 				.HasForeignKey(p => p.ContractPartyId);  // المفتاح الخارجي ContractPartyId
-
+														 // إضافة العلاقة مع Identity
+			builder.HasOne(p => p.Identity)
+				.WithMany(i => i.PersonsInCompanies)  // العلاقة العكسية مع Identity
+				.HasForeignKey(p => p.IdentityId)
+				.IsRequired();  // علاقة مع Identity
 
 		}
 

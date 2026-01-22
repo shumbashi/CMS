@@ -11,8 +11,7 @@ namespace Infrastructure.ORM.Configuratons
 	{
 		public void Configure(EntityTypeBuilder<Document> builder)
 		{
-			// تعيين المفتاح الأساسي
-			builder.HasKey(d => d.Id);  // استخدام `Id` من `BaseEntity` كـ Primary Key
+			builder.HasKey(d => d.Id);  // المفتاح الأساسي
 
 			// تخصيص الحقول الخاصة بالوثيقة
 			builder.Property(d => d.Code)
@@ -35,26 +34,43 @@ namespace Infrastructure.ORM.Configuratons
 			builder.Property(d => d.Clause)
 				.HasMaxLength(500);  // تحديد طول الحقل Clause إلى 500
 
+			// إضافة فهرسة للأعمدة
+
+			builder.HasIndex(d => d.Code)
+	.HasDatabaseName("UQ_DocumentCode")
+	.IsUnique(true);
+
+			builder.HasIndex(d => d.AuthenticationNumber)
+				.HasDatabaseName("UQ_AuthenticationNumber")
+				.IsUnique(true);
+
+			// هذه مش فريدة
+			builder.HasIndex(d => d.DocumentStatus)
+				.HasDatabaseName("Idx_DocumentStatus")
+				.IsUnique(false);
+
+			builder.HasIndex(d => d.IssueDate)
+				.HasDatabaseName("Idx_IssueDate")
+				.IsUnique(false);
+			
 			// تحديد العلاقات مع جداول أخرى
 			builder.HasOne(d => d.Template)
 				.WithMany(t => t.Documents)
-				.HasForeignKey(d => d.TemplateId)  // المفتاح الخارجي TemplateId
-				.OnDelete(DeleteBehavior.Cascade);  // عند حذف القالب، يتم حذف الوثائق المرتبطة
+				.HasForeignKey(d => d.TemplateId)
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.HasOne(d => d.Editor)
 				.WithMany(e => e.Documents)
-				.HasForeignKey(d => d.EditorId)  // المفتاح الخارجي EditorId
-				.OnDelete(DeleteBehavior.Restrict);  // لا يمكن حذف المحرر إذا كانت هناك وثائق مرتبطة
+				.HasForeignKey(d => d.EditorId)
+				.OnDelete(DeleteBehavior.Restrict);
 
-			// العلاقة مع الأطراف عبر جدول ContractPartyInDocument (متعدد إلى متعدد)
 			builder.HasMany(d => d.ContractPartyInDocuments)
 				.WithOne(cpd => cpd.Document)
-				.HasForeignKey(cpd => cpd.DocumentId);  // المفتاح الخارجي DocumentId
+				.HasForeignKey(cpd => cpd.DocumentId);
 
-			// العلاقة مع المرفقات
 			builder.HasMany(d => d.Attachments)
 				.WithOne()
-				.HasForeignKey(a => a.DocumentId);  // المفتاح الخارجي DocumentId للمرفقات
+				.HasForeignKey(a => a.DocumentId);
 		}
 	}
 

@@ -12,8 +12,10 @@ namespace Domain.Entities
 
 		// علاقة متعدد إلى متعدد مع الوثائق عبر جدول ContractPartyInDocument
 		public ICollection<ContractPartyInDocument> ContractPartyInDocuments { get; set; }  // علاقة مع الوثائق عبر جدول مساعد
-
-		// علاقة متعدد إلى متعدد مع الشركات
+																							// العلاقة مع الهوية (Identity)
+		public Guid IdentityId { get; set; }  // مفتاح خارجي لربط الطرف بالهوية
+		public Identity Identity { get; set; }  // العلاقة مع الهوية
+												
 		public ICollection<PersonsInCompany> PersonsInCompany { get; set; }  // العلاقة مع الأشخاص في الشركة
 
 

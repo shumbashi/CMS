@@ -24,6 +24,14 @@ namespace Infrastructure.ORM.Configuratons
 			builder.HasMany(c => c.PersonsInCompany)
 				.WithOne(p => p.Company)
 				.HasForeignKey(p => p.CompanyId);  // المفتاح الخارجي CompanyId في الجدول الوسيط
+			
+			builder.HasIndex(c => c.CompanyName)
+			.HasDatabaseName("UQ_CompanyName")
+			.IsUnique(false);
+
+			builder.HasIndex(c => c.CommercialRecord)
+				.HasDatabaseName("UQ_CommercialRecord")
+				.IsUnique(true);
 
 		}
 	}

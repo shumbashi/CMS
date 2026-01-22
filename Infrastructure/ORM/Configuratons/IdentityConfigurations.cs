@@ -12,26 +12,29 @@ namespace Infrastructure.ORM.Configuratons
 		public void Configure(EntityTypeBuilder<Identity> builder)
 		{
 			builder.HasKey(i => i.Id);  // المفتاح الأساسي من `BaseEntity`
+		
 
-			// تحديد خصائص الـ NationalNumber و PhoneNumber كـ NOT NULL
+			// تخصيص الحقول القابلة لأن تكون NULL مثل NationalNumber و AdministrativeNumber
 			builder.Property(i => i.NationalNumber)
-				.IsRequired();  // الرقم الوطني مطلوب
+				.HasMaxLength(12)
+				.IsRequired(false);  // الرقم الوطني ليس إلزاميًا حسب `IdentityType`، سيبقى `nullable` (NULL)
+
+			builder.Property(i => i.AdministrativeNumber)
+				.HasMaxLength(12)
+				.IsRequired(false);  // الرقم الإداري ليس إلزاميًا، وبالتالي يبقى `nullable` (NULL)
 
 			builder.Property(i => i.BirthDate)
 				.IsRequired();  // تاريخ الميلاد مطلوب
-
-			builder.Property(i => i.NationalId)
-				.HasMaxLength(50);  // تحديد طول الرقم التجاري إذا لزم الأمر
 
 			builder.Property(i => i.Nationality)
 				.HasMaxLength(50);  // تحديد طول الجنسية
 
 			builder.Property(i => i.PhoneNumber)
 				.IsRequired()
-				.HasMaxLength(50);  // تحديد طول رقم الهاتف إلى 50
+				.HasMaxLength(12);  // تحديد طول رقم الهاتف
 
 			builder.Property(i => i.IdentityProof)
-				.HasMaxLength(100);  // تحديد طول إثبات الهوية
+				.HasMaxLength(12);  // تحديد طول إثبات الهوية
 
 			// العلاقة مع المستخدم (User)
 			builder.HasOne(i => i.User)
@@ -39,9 +42,41 @@ namespace Infrastructure.ORM.Configuratons
 				.HasForeignKey(i => i.UserId)  // المفتاح الخارجي UserId
 				.IsRequired();  // العلاقة مطلوبة
 
-			// تخصيص العلاقة بين الـ Identity و User في حالة وجود خصائص إضافية قد تحتاج إلى تفعيلها
+			// العلاقة مع المحرر (Editor)
+			builder.HasMany(e => e.Editors)
+				.WithOne(i => i.Identity)
+				.HasForeignKey(i => i.IdentityId)
+				.IsRequired();  // العلاقة مع المحرر
+
+			// العلاقة مع الأطراف (ContractParty)
+			builder.HasMany(i => i.ContractParties)
+				.WithOne(cp => cp.Identity)
+				.HasForeignKey(cp => cp.IdentityId)
+				.IsRequired();  // العلاقة مع الأطراف
+
+			// العلاقة مع الأشخاص في الشركات (PersonsInCompany)
+			builder.HasMany(i => i.PersonsInCompanies)
+				.WithOne(p => p.Identity)
+				.HasForeignKey(p => p.IdentityId)
+				.IsRequired();  // العلاقة مع الأشخاص في الشركات
+
+
+
+			// إضافة الفهرسة للأعمدة
+			builder.HasIndex(i => i.NationalNumber)
+				.HasDatabaseName("UQ_NationalNumber")
+				.IsUnique(true);  // فهرسة الرقم الوطني ليكون فريدًا
+
+			builder.HasIndex(i => i.AdministrativeNumber)
+				.HasDatabaseName("UQ_AdministrativeNumber")
+				.IsUnique(true);  // فهرسة الرقم الإداري ليكون فريدًا
+
+			builder.HasIndex(i => i.PhoneNumber)
+				.HasDatabaseName("UQ_PhoneNumber")
+				.IsUnique(true);  // فهرسة رقم الهاتف ليكون ف
 		}
 	}
+
 
 
 }

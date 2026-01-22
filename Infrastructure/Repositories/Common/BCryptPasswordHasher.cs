@@ -1,4 +1,5 @@
 ﻿
+using Application.Interfaces.Common;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,16 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Common
 {
-	public class BCryptPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class
+	public class BCryptPasswordHasher : IPasswordHasher
 	{
-		public string HashPassword(TUser user, string password)
+		public string HashPassword(string password)
 		{
 			return BCrypt.Net.BCrypt.HashPassword(password);
 		}
 
-		public PasswordVerificationResult VerifyHashedPassword(
-			TUser user,
-			string hashedPassword,
-			string providedPassword)
+		public bool VerifyPassword(string password, string hash)
 		{
-			bool ok = BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
-
-			return ok
-				? PasswordVerificationResult.Success
-				: PasswordVerificationResult.Failed;
+			return BCrypt.Net.BCrypt.Verify(password, hash);
 		}
 	}
 }

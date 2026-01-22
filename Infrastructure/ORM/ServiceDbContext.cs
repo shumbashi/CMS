@@ -38,6 +38,12 @@ namespace Infrastructure.ORM
 		public DbSet<Identity> Identities { get; set; }  
 		public DbSet<Company> Companies { get; set; }  
 		public DbSet<PartyRole> PartyRoles { get; set; }  
+		public DbSet<UserRole> UserRoles { get; set; }  
+		public DbSet<Role> Roles { get; set; }  
+		public DbSet<RolePermission> RolePermissions { get; set; }  
+		public DbSet<Permission> Permissions { get; set; }  
+		public DbSet<UserActivity> UserActivities { get; set; }  
+		public DbSet<PersonsInCompany> PersonsInCompanies { get; set; }  
 
 
 

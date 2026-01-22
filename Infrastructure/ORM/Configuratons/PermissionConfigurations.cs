@@ -19,6 +19,10 @@ namespace Infrastructure.ORM.Configuratons
 
 			builder.Property(p => p.Description)
 				.HasMaxLength(255);  // تحديد طول الحقل Description إلى 255
+
+			builder.HasMany(r => r.RolePermissions)
+				.WithOne(p => p.Permission)
+				.HasForeignKey(p => p.PermissionId);
 		}
 	}
 

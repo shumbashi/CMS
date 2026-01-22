@@ -25,5 +25,11 @@ public class ContractPartyConfigurations : IEntityTypeConfiguration<ContractPart
 		builder.HasMany(c => c.PersonsInCompany)
 			.WithOne(p => p.ContractParty)
 			.HasForeignKey(p => p.ContractPartyId);  // المفتاح الخارجي ContractPartyId في الجدول الوسيط
+
+		// العلاقة مع Identity
+		builder.HasOne(c => c.Identity)
+			.WithMany(i => i.ContractParties)
+			.HasForeignKey(c => c.IdentityId)
+			.IsRequired();  // العلاقة مع Identity
 	}
 }

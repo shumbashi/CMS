@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,18 +9,21 @@ namespace Application.DTOs.DocumentDTO
     public class CreateDocumentDto
     {
 		public Guid TemplateId { get; set; }  // معرف القالب (Foreign Key)
-		public Template Template { get; set; }  // العلاقة مع القالب
-
+		
 		public Guid EditorId { get; set; }  // معرف المحرر (Foreign Key)
-		public Editor Editor { get; set; }  // العلاقة مع المحرر
 
-
+		public string Code { get; set; }  // رمز الوثيقة
 		public DateTime IssueDate { get; set; }  // تاريخ ووقت الإصدار
 
 		public string DocumentStatus { get; set; }  // حالة الوثيقة
-
+		public string Notes { get; set; }  // ملاحظات
 		public int AuthenticationNumber { get; set; }  // رقم التصديق
+		public string Clause { get; set; }  // البنود
 
 		public string CertificationLocation { get; set; }  // موقع التوثيق
+		public ICollection<Guid> ContractPartyIds { get; set; }  // معرفات الأطراف )
+
+		public ICollection<Guid> AttachmentIds { get; set; }  // معرفات المرفقات )
+
 	}
 }

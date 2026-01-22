@@ -7,6 +7,7 @@ namespace Application.DTOs.EditorDTO
     public class UpdateEditorDto
     {
 		public Guid Id { get; set; }
+		public string EditorName { get; set; }
 		public string InspectionNumber { get; set; }  // رقم قيد التفتيش
 
 		public string SealNumber { get; set; }  // رقم الختم الإلكتروني
@@ -18,9 +19,5 @@ namespace Application.DTOs.EditorDTO
 		public DateTime BirthDate { get; set; }  // تاريخ الميلاد
 
 		public decimal FinancialBalance { get; set; }  // الرصيد المالي
-
-		public decimal Length { get; set; }  // الطول
-
-		public decimal Width { get; set; }  // العرض
 	}
 }

@@ -9,5 +9,7 @@ namespace Domain.Entities
 	{
 		public string Name { get; set; }  // اسم الصلاحية (مثل: "قراءة"، "كتابة")
 		public string Description { get; set; }  // وصف الصلاحية
+
+		public virtual ICollection<RolePermission> RolePermissions { get; set; }
 	}
 }
