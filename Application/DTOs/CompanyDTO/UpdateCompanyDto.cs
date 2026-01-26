@@ -6,8 +6,13 @@ namespace Application.DTOs.CompanyDTO
 {
 	public class UpdateCompanyDto
 	{
-		public Guid Id { get; set; }
-		public string CompanyName { get; set; }  // اسم الشركة
-		public string CommercialRecord { get; set; }  // السجل التجاري
-	}
+       
+        public Guid Id { get; set; }
+
+
+        public string? CompanyName { get; set; }
+        public string? CommercialRecord { get; set; }
+
+        
+    }
 }

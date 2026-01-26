@@ -1,17 +1,46 @@
-﻿using Application.Resources;
+﻿using Application.DTOs.ContractPartyDTO;
+using Application.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Features.ContractParties.Command
 {
-	public class UpdateContractPartyValidator : BaseContractPartyValidator
+	public class UpdateContractPartyValidator : AbstractValidator<UpdateContractPartyDto>
 	{
 		public UpdateContractPartyValidator(IStringLocalizer<SharedResources> localizer)
-			: base(localizer)
 		{
-			// إذا كان هناك قواعد إضافية خاصة بـ Update يمكن إضافتها هنا
+			RuleFor(x => x).NotNull().WithMessage(localizer["RequestCannotBeNull"]);
+
+			// Id must be present to locate the entity
+			RuleFor(x => x.Id).NotEmpty().WithMessage(localizer["IdRequired"]);
+
+			// Validate optional fields only when provided (patch-friendly)
+			When(x => x.ContractPartyName != null, () =>
+			{
+				RuleFor(x => x.ContractPartyName)
+					.NotEmpty().WithMessage(localizer["PartyNameRequired"])
+					.MaximumLength(100).WithMessage(localizer["MaxLengthIs100"]);
+			});
+
+			When(x => x.Residence != null, () =>
+			{
+				RuleFor(x => x.Residence)
+					.NotEmpty().WithMessage(localizer["ResidenceRequired"])
+					.MaximumLength(200).WithMessage(localizer["MaxLengthIs200"]);
+			});
+
+			When(x => x.DocumentIds != null, () =>
+			{
+				RuleForEach(x => x.DocumentIds)
+					.NotEmpty().WithMessage(localizer["DocumentIdRequired"]);
+			});
+
+			When(x => x.CompanyIds != null, () =>
+			{
+				RuleForEach(x => x.CompanyIds)
+					.NotEmpty().WithMessage(localizer["CompanyIdRequired"]);
+			});
 		}
 	}
 }

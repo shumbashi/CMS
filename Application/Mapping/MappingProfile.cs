@@ -16,87 +16,133 @@ using Application.DTOs.UserDTO;
 using AutoMapper;
 using Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Mapping
 {
 	public class MappingProfile : Profile
 	{
 		public MappingProfile()
-	{
-		// Editor
-		CreateMap<Editor, EditorDto>().ReverseMap();
-		CreateMap<CreateEditorDto, Editor>().ReverseMap();
-		CreateMap<UpdateEditorDto, Editor>().ReverseMap();
+		{
+			// Editor
+			ApplyPair(CreateMap<Editor, EditorDto>().ReverseMap());
 
-		// FinancialTransaction
-		CreateMap<FinancialTransaction, FinancialTransactionDto>().ReverseMap();
-		CreateMap<CreateFinancialTransactionDto, FinancialTransaction>().ReverseMap();
-		CreateMap<UpdateFinancialTransactionDto, FinancialTransaction>().ReverseMap();
+			// FinancialTransaction
+			ApplyPair(CreateMap<FinancialTransaction, FinancialTransactionDto>().ReverseMap());
 
-		// Identity
-		CreateMap<Identity, IdentityDto>().ReverseMap();
-		CreateMap<CreateIdentityDto, Identity>().ReverseMap();
-		CreateMap<UpdateIdentityDto, Identity>().ReverseMap();
+			// Identity
+			ApplyPair(CreateMap<Identity, IdentityDto>().ReverseMap());
 
-		// Notification
-		CreateMap<Notification, NotificationDto>().ReverseMap();
-		CreateMap<CreateNotificationDto, Notification>().ReverseMap();
-		CreateMap<UpdateNotificationDto, Notification>().ReverseMap();
+			// Notification
+			ApplyPair(CreateMap<Notification, NotificationDto>().ReverseMap());
 
-		// PartyRole
-		CreateMap<PartyRole, PartyRoleDto>().ReverseMap();
-		CreateMap<CreatePartyRoleDto, PartyRole>().ReverseMap();
-		CreateMap<UpdatePartyRoleDto, PartyRole>().ReverseMap();
+			// PartyRole
+			ApplyPair(CreateMap<PartyRole, PartyRoleDto>().ReverseMap());
 
-		// Permission
-		CreateMap<Permission, PermissionDto>().ReverseMap();
-		CreateMap<CreatePermissionDto, Permission>().ReverseMap();
-		CreateMap<UpdatePermissionDto, Permission>().ReverseMap();
+			// Permission
+			ApplyPair(CreateMap<Permission, PermissionDto>().ReverseMap());
 
-		// PersonsInCompany
-		CreateMap<PersonsInCompany, PersonsInCompanyDto>().ReverseMap();
-		CreateMap<CreatePersonsInCompanyDto, PersonsInCompany>().ReverseMap();
-		CreateMap<UpdatePersonsInCompanyDto, PersonsInCompany>().ReverseMap();
+			// PersonsInCompany
+			ApplyPair(CreateMap<PersonsInCompany, PersonsInCompanyDto>().ReverseMap());
 
-		// Attachment
-		CreateMap<Attachment, AttachmentDto>().ReverseMap();
-		CreateMap<CreateAttachmentDto, Attachment>().ReverseMap();
-		CreateMap<UpdateAttachmentDto, Attachment>().ReverseMap();
+			// Attachment
+			ApplyPair(CreateMap<Attachment, AttachmentDto>().ReverseMap());
 
-		// AuditRecord
-		CreateMap<AuditRecord, AuditRecordDto>().ReverseMap();
-		CreateMap<CreateAuditRecordDto, AuditRecord>().ReverseMap();
-		CreateMap<UpdateAuditRecordDto, AuditRecord>().ReverseMap();
+			// AuditRecord
+			ApplyPair(CreateMap<AuditRecord, AuditRecordDto>().ReverseMap());
 
-		// Company
-		CreateMap<Company, CompanyDto>().ReverseMap();
-		CreateMap<CreateCompanyDto, Company>().ReverseMap();
-		CreateMap<UpdateCompanyDto, Company>().ReverseMap();
+			// Company
+			ApplyPair(CreateMap<Company, CompanyDto>().ReverseMap());
 
-		// ContractParty
-		CreateMap<ContractParty, ContractPartyDto>().ReverseMap();
-		CreateMap<CreateContractPartyDto, ContractParty>().ReverseMap();
-		CreateMap<UpdateContractPartyDto, ContractParty>().ReverseMap();
+			// ContractParty
+			ApplyPair(CreateMap<ContractParty, ContractPartyDto>().ReverseMap());
 
-		// ContractPartyInDocument
-		CreateMap<ContractPartyInDocument, ContractPartyInDocumentDto>().ReverseMap();
-		CreateMap<CreateContractPartyInDocumentDto, ContractPartyInDocument>().ReverseMap();
-		CreateMap<UpdateContractPartyInDocumentDto, ContractPartyInDocument>().ReverseMap();
+			// ContractPartyInDocument
+			ApplyPair(CreateMap<ContractPartyInDocument, ContractPartyInDocumentDto>().ReverseMap());
 
-		// Document
-		CreateMap<Document, DocumentDto>().ReverseMap();
-		CreateMap<CreateDocumentDto, Document>().ReverseMap();
-		CreateMap<UpdateDocumentDto, Document>().ReverseMap();
+			// Document
+			ApplyPair(CreateMap<Document, DocumentDto>().ReverseMap());
 
-			//user
-        CreateMap<User , UserDto>().ReverseMap();
-			CreateMap<CreateUserDto, User>().ReverseMap();
-			CreateMap<UpdateUserDto, User>().ReverseMap();
+			// User
+			ApplyPair(CreateMap<User, UserDto>().ReverseMap());
 
+			// Create / Update maps (explicit DTO -> Entity)
+			ApplyPair(CreateMap<CreateEditorDto, Editor>().ReverseMap());
+			ApplyPair(CreateMap<UpdateEditorDto, Editor>().ReverseMap());
 
+			ApplyPair(CreateMap<CreateFinancialTransactionDto, FinancialTransaction>().ReverseMap());
+			ApplyPair(CreateMap<UpdateFinancialTransactionDto, FinancialTransaction>().ReverseMap());
 
+			ApplyPair(CreateMap<CreateIdentityDto, Identity>().ReverseMap());
+			ApplyPair(CreateMap<UpdateIdentityDto, Identity>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateNotificationDto, Notification>().ReverseMap());
+			ApplyPair(CreateMap<UpdateNotificationDto, Notification>().ReverseMap());
+
+			ApplyPair(CreateMap<CreatePartyRoleDto, PartyRole>().ReverseMap());
+			ApplyPair(CreateMap<UpdatePartyRoleDto, PartyRole>().ReverseMap());
+
+			ApplyPair(CreateMap<CreatePermissionDto, Permission>().ReverseMap());
+			ApplyPair(CreateMap<UpdatePermissionDto, Permission>().ReverseMap());
+
+			ApplyPair(CreateMap<CreatePersonsInCompanyDto, PersonsInCompany>().ReverseMap());
+			ApplyPair(CreateMap<UpdatePersonsInCompanyDto, PersonsInCompany>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateAttachmentDto, Attachment>().ReverseMap());
+			ApplyPair(CreateMap<UpdateAttachmentDto, Attachment>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateAuditRecordDto, AuditRecord>().ReverseMap());
+			ApplyPair(CreateMap<UpdateAuditRecordDto, AuditRecord>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateCompanyDto, Company>().ReverseMap());
+			ApplyPair(CreateMap<UpdateCompanyDto, Company>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateContractPartyDto, ContractParty>().ReverseMap());
+			ApplyPair(CreateMap<UpdateContractPartyDto, ContractParty>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateContractPartyInDocumentDto, ContractPartyInDocument>().ReverseMap());
+			ApplyPair(CreateMap<UpdateContractPartyInDocumentDto, ContractPartyInDocument>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateDocumentDto, Document>().ReverseMap());
+			ApplyPair(CreateMap<UpdateDocumentDto, Document>().ReverseMap());
+
+			ApplyPair(CreateMap<CreateUserDto, User>().ReverseMap());
+			ApplyPair(CreateMap<UpdateUserDto, User>().ReverseMap());
+		}
+
+		// Helper: apply the same null/default-source-member condition to both mapping directions
+		private void ApplyPair<TSource, TDestination>(IMappingExpression<TSource, TDestination> forward)
+		{
+			// Apply to forward mapping
+			ApplyIgnoreNullCondition(forward);
+
+			// If ReverseMap() was called before passing here, AutoMapper returned the reverse mapping expression.
+			// Attempt to find and apply to the reverse mapping as well if available:
+			// ReverseMap returns IMappingExpression<TDestination, TSource>, so try to cast.
+			if (forward is IMappingExpression<TDestination, TSource> reverse)
+			{
+				ApplyIgnoreNullCondition(reverse);
+				return;
+			}
+
+			// Some calls pass only a forward mapping (without ReverseMap). Nothing else required.
+		}
+
+		private void ApplyIgnoreNullCondition<TSource, TDestination>(IMappingExpression<TSource, TDestination> map)
+		{
+			map.ForAllMembers(opt =>
+			{
+				opt.Condition((src, dest, srcMember) =>
+				{
+					if (srcMember == null)
+						return false;
+
+					if (srcMember is Guid g && g == Guid.Empty)
+						return false;
+
+					// keep the value for non-null / non-default members
+					return true;
+				});
+			});
 		}
 	}
 }

@@ -1,13 +1,13 @@
-﻿using Application.DTOs.EditorDTO;
+﻿using Application.DTOs.RoleDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Editors.Command
+namespace Application.Features.Role.Command
 {
-	public class UpdateEditorValidator : AbstractValidator<UpdateEditorDto>
+	public class UpdateRoleValidator : AbstractValidator<UpdateRoleDto>
 	{
-		public UpdateEditorValidator(IStringLocalizer<UpdateEditorDto> localizer)
+		public UpdateRoleValidator(IStringLocalizer<UpdateRoleDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 
@@ -22,7 +22,7 @@ namespace Application.Features.Editors.Command
 					if (val == Guid.Empty) ctx.AddFailure("Id", "Id is required.");
 				}
 
-				var nameProp = dto.GetType().GetProperty("EditorName") ?? dto.GetType().GetProperty("Name");
+				var nameProp = dto.GetType().GetProperty("RoleName") ?? dto.GetType().GetProperty("Name");
 				if (nameProp != null && nameProp.PropertyType == typeof(string))
 				{
 					var s = (string)nameProp.GetValue(dto);

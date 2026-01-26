@@ -1,4 +1,6 @@
-﻿using Application.Resources;
+﻿using Application.DTOs.TemplateDTO;
+using Application.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -6,12 +8,16 @@ using System.Text;
 
 namespace Application.Features.Template.Command
 {
-	public class CreateTemplateValidator : BaseTemplateValidator
+	public class CreateTemplateValidator : AbstractValidator<CreateTemplateDto> // قاعدة مشتركة بين Create و Update
 	{
 		public CreateTemplateValidator(IStringLocalizer<SharedResources> localizer)
-			: base(localizer)
 		{
-			// إذا كان هناك قواعد إضافية خاصة بـ Create يمكن إضافتها هنا
+			RuleFor(x => x.TemplateName)
+				.NotEmpty().WithMessage(localizer["NotEmpty"])
+				.MaximumLength(100).WithMessage(localizer["MaxLengthIs100"]);
+
+			RuleFor(x => x.TemplateStatus)
+				.NotEmpty().WithMessage(localizer["NotEmpty"]);
 		}
 	}
 }

@@ -1,13 +1,13 @@
-﻿using Application.DTOs.DocumentDTO;
+﻿using Application.DTOs.AuditRecordDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Documents.Command
+namespace Application.Features.AuditRecords.Command
 {
-	public class UpdateDocumentValidator : AbstractValidator<UpdateDocumentDto>
+	public class UpdateAuditRecordValidator : AbstractValidator<UpdateAuditRecordDto>
 	{
-		public UpdateDocumentValidator(IStringLocalizer<UpdateDocumentDto> localizer)
+		public UpdateAuditRecordValidator(IStringLocalizer<UpdateAuditRecordDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 

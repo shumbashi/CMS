@@ -1,4 +1,9 @@
 ﻿using Api.API_s;
+using Api.API_s.Common;
+using Application.DTOs.UserActivityDTO;
+using Application.DTOs.UserRoleDTO;
+using Application.Features.ContractPartyInDocuments.Command;
+using Application.Features.Template.Command;
 using Application.Features.User.Command;
 using Application.Features.User.Queries;
 using Application.Features.UserActivities.Command;
@@ -14,13 +19,54 @@ using Infrastructure.Repositories;
 using Infrastructure.Repositories.Common;
 using Infrastructure.Repositories.Infrastructure.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// C#
+/*builder.WebHost.UseUrls("http://localhost:5185"); // choose an unused port
+*/
+// --------------------------- Add Swagger Documentation ---------------------------
+builder.Services.AddEndpointsApiExplorer(); // Important for Minimal API endpoints
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(c =>
+{
+	c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+	// Optional: Add support for Bearer Token
+	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey,
+		Scheme = "Bearer",
+		BearerFormat = "JWT"
+	});
+	c.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			new string[] {}
+		}
+	});
+});
 
 // --------------------------- Localization ---------------------------
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -34,12 +80,11 @@ builder.Services.AddDbContext<ServiceDbContext>(options =>
 );
 
 // --------------------------- Infrastructure DI ---------------------------
-builder.Services.AddInfrastructure(); // يضيف كل الـRepositories + UnitOfWork + PasswordHasher
+builder.Services.AddInfrastructure(); // Adds all Repositories + UnitOfWork + PasswordHasher
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
 // --------------------------- String Localizer ---------------------------
-// هذا يحل مشكلة IStringLocalizer في كل Validators و Handlers
 builder.Services.AddSingleton(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
 
 // --------------------------- MediatR ---------------------------
@@ -47,8 +92,8 @@ builder.Services.AddMediatR(cfg =>
 	cfg.RegisterServicesFromAssembly(typeof(GetAllUsersQuery).Assembly));
 
 // --------------------------- FluentValidation ---------------------------
-// يغطي كل Validators في Assembly
-builder.Services.AddValidatorsFromAssembly(typeof(BaseUserValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(CreateUserValidator).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateContractPartyInDocumentValidator>();
 
 // --------------------------- AutoMapper ---------------------------
 builder.Services.AddAutoMapper(cfg =>
@@ -56,59 +101,61 @@ builder.Services.AddAutoMapper(cfg =>
 	cfg.AddProfile<MappingProfile>();
 });
 
+// --------------------------- Repositories ---------------------------
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEditorRepository, EditorRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IContractPartyRepository, ContractPartyRepository>();
+builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+builder.Services.AddScoped<IAuditRecordRepository, AuditRecordRepository>();
+builder.Services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IContractPartyInDocumentRepository, ContractPartyInDocumentRepository>();
+builder.Services.AddScoped<ITemplateFieldRepository, TemplateFieldRepository>();
+builder.Services.AddScoped<IIdentityRepository, IdentityRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IPartyRoleRepository, PartyRoleRepository>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
+builder.Services.AddScoped<IPersonsInCompanyRepository, PersonsInCompanyRepository>();
 
-
-
-// تسجيل إعدادات JWT بشكل قياسي في DI container
-
-/*
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
-builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-builder.Services.AddScoped<IFileStorageService, FileStorageService>();*/
-
-/*// تفعيل JWT Authentication
+// --------------------------- Authentication Configuration ---------------------------
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddJwtBearer(options =>
-	{
-		// نقرأ الإعدادات من الـ configuration مباشرة وقت التشغيل
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Auth:Authority"];
+        options.Audience = builder.Configuration["Auth:Audience"];
+        // configure token validation as needed
+    });
 
-		var jwtOptions = builder.Configuration.GetSection("JWT").Get<JwtOptions>();
-
-		options.SaveToken = true;
-		options.TokenValidationParameters = new TokenValidationParameters
-		{
-			ValidateIssuer = true,
-			ValidIssuer = jwtOptions.Issuer,
-			ValidateAudience = true,
-			ValidAudience = jwtOptions.Audience,
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
-		};
-	});
-*/
 // --------------------------- Build App ---------------------------
-ذvar app = builder.Build();
-// تسجيل جميع الـ API Endpoints الخاصة بكل كائن
-app.MapUserEndpoints();      // تسجيل Endpoints الخاصة بـ User
-app.MapEditorEndpoints();    // تسجيل Endpoints الخاصة بـ Editor
-app.MapRoleEndpoints();      // تسجيل Endpoints الخاصة بـ Role
-app.MapPermissionEndpoints(); // تسجيل Endpoints الخاصة بـ Permission
-app.MapUserActivityEndpoints(); // تسجيل Endpoints الخاصة بـ UserActivity
-app.MapDocumentEndpoints();  // تسجيل Endpoints الخاصة بـ Document
-app.MapContractPartyEndpoints(); // تسجيل Endpoints الخاصة بـ ContractParty
-app.MapTemplateEndpoints();  // تسجيل Endpoints الخاصة بـ Template
-app.MapAttachmentEndpoints(); // تسجيل Endpoints الخاصة بـ Attachment
-app.MapAuditRecordEndpoints(); // تسجيل Endpoints الخاصة بـ AuditRecord
-app.MapFinancialTransactionEndpoints(); // تسجيل Endpoints الخاصة بـ FinancialTransaction
-app.MapNotificationEndpoints(); // تسجيل Endpoints الخاصة بـ Notification
-app.MapContractPartyInDocumentEndpoints(); // تسجيل Endpoints الخاصة بـ ContractPartyInDocument
-app.MapTemplateFieldEndpoints(); // تسجيل Endpoints الخاصة بـ TemplateField
-app.MapIdentityEndpoints();  // تسجيل Endpoints الخاصة بـ Identity
-app.MapCompanyEndpoints();   // تسجيل Endpoints الخاصة بـ Company
-app.MapPartyRoleEndpoints(); // تسجيل Endpoints الخاصة بـ PartyRole
-app.MapUserRoleEndpoints();  // تسجيل Endpoints الخاصة بـ UserRole
-app.MapRolePermissionEndpoints(); // تسجيل Endpoints الخاصة بـ RolePermission
-app.MapPersonsInCompanyEndpoints(); // تسجيل Endpoints الخاصة بـ PersonsInCompany
+var app = builder.Build();
+
+// --------------------------- API Endpoints ---------------------------
+app.MapUserEndpoints(); // Register User Endpoints
+app.MapEditorEndpoints(); // Register Editor Endpoints
+app.MapRoleEndpoints(); // Register Role Endpoints
+app.MapPermissionEndpoints(); // Register Permission Endpoints
+app.MapUserActivityEndpoints(); // Register UserActivity Endpoints
+app.MapDocumentEndpoints(); // Register Document Endpoints
+app.MapContractPartyEndpoints(); // Register ContractParty Endpoints
+app.MapTemplateEndpoints(); // Register Template Endpoints
+app.MapAttachmentEndpoints(); // Register Attachment Endpoints
+app.MapAuditRecordEndpoints(); // Register AuditRecord Endpoints
+app.MapFinancialTransactionEndpoints(); // Register FinancialTransaction Endpoints
+app.MapNotificationEndpoints(); // Register Notification Endpoints
+app.MapContractPartyInDocumentEndpoints(); // Register ContractPartyInDocument Endpoints
+app.MapTemplateFieldEndpoints(); // Register TemplateField Endpoints
+app.MapIdentityEndpoints(); // Register Identity Endpoints
+app.MapCompanyEndpoints(); // Register Company Endpoints
+app.MapPartyRoleEndpoints(); // Register PartyRole Endpoints
+app.MapUserRoleEndpoints(); // Register UserRole Endpoints
+app.MapRolePermissionEndpoints(); // Register RolePermission Endpoints
+app.MapPersonsInCompanyEndpoints(); // Register PersonsInCompany Endpoints
 
 // --------------------------- Localization Configuration ---------------------------
 app.UseRequestLocalization(options =>
@@ -119,15 +166,22 @@ app.UseRequestLocalization(options =>
 		   .AddSupportedUICultures(supportedCultures);
 });
 
-// --------------------------- Pipeline Configuration ---------------------------
+// --------------------------- Swagger UI ---------------------------
 if (app.Environment.IsDevelopment())
 {
-	app.MapOpenApi();
+	app.UseSwagger();
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+		c.RoutePrefix = string.Empty; // Makes Swagger UI available at root
+	});
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// --------------------------- Authentication/Authorization ---------------------------
+app.UseAuthentication();
+
 
 app.MapControllers();
 

@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Application.Features.UserRole.Command
 {
-	public class BaseUserRoleValidator : AbstractValidator<CreateUserRoleDto>  // قاعدة مشتركة بين Create و Update
+	public class CreateUserRoleValidator : AbstractValidator<CreateUserRoleDto>  // قاعدة مشتركة بين Create و Update
 	{
-		public BaseUserRoleValidator(IStringLocalizer<SharedResources> localizer)
+		public CreateUserRoleValidator(IStringLocalizer<SharedResources> localizer)
 		{
 			RuleFor(x => x.UserId)
 				.NotEmpty().WithMessage(localizer["UserIdRequired"]);

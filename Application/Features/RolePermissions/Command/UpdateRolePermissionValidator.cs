@@ -1,13 +1,13 @@
-﻿using Application.DTOs.DocumentDTO;
+﻿
+using Application.DTOs.RolePermissionDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
-
-namespace Application.Features.Documents.Command
+namespace Application.Features.RolePermissions.Command
 {
-	public class UpdateDocumentValidator : AbstractValidator<UpdateDocumentDto>
+	public class UpdateRolePermissionValidator : AbstractValidator<UpdateRolePermissionDto>
 	{
-		public UpdateDocumentValidator(IStringLocalizer<UpdateDocumentDto> localizer)
+		public UpdateRolePermissionValidator(IStringLocalizer<UpdateRolePermissionDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 

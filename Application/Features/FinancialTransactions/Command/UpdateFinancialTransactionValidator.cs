@@ -1,13 +1,14 @@
-﻿using Application.DTOs.DocumentDTO;
+﻿using Application.DTOs.FinancialTransactionDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Documents.Command
+
+namespace Application.Features.FinancialTransactions.Command
 {
-	public class UpdateDocumentValidator : AbstractValidator<UpdateDocumentDto>
+	public class UpdateFinancialTransactionValidator : AbstractValidator<UpdateFinancialTransactionDto>
 	{
-		public UpdateDocumentValidator(IStringLocalizer<UpdateDocumentDto> localizer)
+		public UpdateFinancialTransactionValidator(IStringLocalizer<UpdateFinancialTransactionDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 

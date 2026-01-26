@@ -1,13 +1,13 @@
-﻿using Application.DTOs.EditorDTO;
+﻿using Application.DTOs.AttachmentDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Editors.Command
+namespace Application.Features.Attachments.Command
 {
-	public class UpdateEditorValidator : AbstractValidator<UpdateEditorDto>
+	public class UpdateAttachmentValidator : AbstractValidator<UpdateAttachmentDto>
 	{
-		public UpdateEditorValidator(IStringLocalizer<UpdateEditorDto> localizer)
+		public UpdateAttachmentValidator(IStringLocalizer<UpdateAttachmentDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 
@@ -22,7 +22,7 @@ namespace Application.Features.Editors.Command
 					if (val == Guid.Empty) ctx.AddFailure("Id", "Id is required.");
 				}
 
-				var nameProp = dto.GetType().GetProperty("EditorName") ?? dto.GetType().GetProperty("Name");
+				var nameProp = dto.GetType().GetProperty("AttachmentName") ?? dto.GetType().GetProperty("Name");
 				if (nameProp != null && nameProp.PropertyType == typeof(string))
 				{
 					var s = (string)nameProp.GetValue(dto);

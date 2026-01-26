@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Application.Features.User.Command
 {
-	public class BaseUserValidator : AbstractValidator<CreateUserDto>  // يمكنك أن تجعلها قاعدة لمشاركة القواعد بين `CreateUserDto` و `UpdateUserDto`
+	public class CreateUserValidator : AbstractValidator<CreateUserDto>  // يمكنك أن تجعلها قاعدة لمشاركة القواعد بين `CreateUserDto` و `UpdateUserDto`
 	{
-		public BaseUserValidator(IStringLocalizer<SharedResources> localizer)
+		public CreateUserValidator(IStringLocalizer<SharedResources> localizer)
 		{
 			RuleFor(x => x.Name)
 				.NotEmpty().WithMessage(localizer["NotEmpty"])

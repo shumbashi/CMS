@@ -1,13 +1,13 @@
-﻿using Application.DTOs.DocumentDTO;
+﻿using Application.DTOs.NotificationDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Documents.Command
+namespace Application.Features.Notifications.Command
 {
-	public class UpdateDocumentValidator : AbstractValidator<UpdateDocumentDto>
+	public class UpdateNotificationValidator : AbstractValidator<UpdateNotificationDto>
 	{
-		public UpdateDocumentValidator(IStringLocalizer<UpdateDocumentDto> localizer)
+		public UpdateNotificationValidator(IStringLocalizer<UpdateNotificationDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 

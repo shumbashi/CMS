@@ -1,13 +1,13 @@
-﻿using Application.DTOs.DocumentDTO;
+﻿using Application.DTOs.IdentityDTO;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
 
-namespace Application.Features.Documents.Command
+namespace Application.Features.Identity.Command
 {
-	public class UpdateDocumentValidator : AbstractValidator<UpdateDocumentDto>
+	public class UpdateIdentityValidator : AbstractValidator<UpdateIdentityDto>
 	{
-		public UpdateDocumentValidator(IStringLocalizer<UpdateDocumentDto> localizer)
+		public UpdateIdentityValidator(IStringLocalizer<UpdateIdentityDto> localizer)
 		{
 			RuleFor(x => x).NotNull().WithMessage("Request cannot be null.");
 
