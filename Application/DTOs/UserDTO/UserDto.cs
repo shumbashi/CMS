@@ -17,7 +17,7 @@ namespace Application.DTOs.UserDTO
 
 		public string Phone { get; set; }  // رقم الهاتف
 
-		public int NationalNumber { get; set; }  // الرقم الوطني
+	
 
 	}
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace Infrastructure.ORM.Configuratons
@@ -22,8 +23,7 @@ namespace Infrastructure.ORM.Configuratons
 				.HasMaxLength(50);  // تحديد طول الحقل Email إلى 50
 
 			builder.Property(u => u.Password)
-				.IsRequired()
-				.HasMaxLength(50);  // تحديد طول الحقل Password إلى 50
+	   .HasMaxLength(255); // تحديد طول الحقل Password إلى 50
 
 			builder.Property(u => u.Phone)
 				.IsRequired()

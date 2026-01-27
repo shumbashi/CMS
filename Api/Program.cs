@@ -10,6 +10,7 @@ using Application.Features.UserActivities.Command;
 using Application.Features.UserActivities.Queries;
 using Application.Interfaces;
 using Application.Interfaces.Common;
+using Application.Interfaces.Helper;
 using Application.Interfaces.Repository;
 using Application.Mapping;
 using AutoMapper;
@@ -32,53 +33,21 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// C#
-/*builder.WebHost.UseUrls("http://localhost:5185"); // choose an unused port
-*/
-// --------------------------- Add Swagger Documentation ---------------------------
-builder.Services.AddEndpointsApiExplorer(); // Important for Minimal API endpoints
-builder.Services.AddAuthorization();
+
+// --------------------------- Controllers & Swagger ---------------------------
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c =>
-{
-	c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-	// Optional: Add support for Bearer Token
-	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-	{
-		In = ParameterLocation.Header,
-		Name = "Authorization",
-		Type = SecuritySchemeType.ApiKey,
-		Scheme = "Bearer",
-		BearerFormat = "JWT"
-	});
-	c.AddSecurityRequirement(new OpenApiSecurityRequirement
-	{
-		{
-			new OpenApiSecurityScheme
-			{
-				Reference = new OpenApiReference
-				{
-					Type = ReferenceType.SecurityScheme,
-					Id = "Bearer"
-				}
-			},
-			new string[] {}
-		}
-	});
-});
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerGen();
 // --------------------------- Localization ---------------------------
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // --------------------------- DbContext ---------------------------
 builder.Services.AddDbContext<ServiceDbContext>(options =>
-	options.UseMySql(
-		builder.Configuration.GetConnectionString("CMS"),
-		ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("CMS"))
-	)
+	options.UseMySql(builder.Configuration.GetConnectionString("CMS"),
+		ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("CMS")))
 );
-
 // --------------------------- Infrastructure DI ---------------------------
 builder.Services.AddInfrastructure(); // Adds all Repositories + UnitOfWork + PasswordHasher
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -167,14 +136,12 @@ app.UseRequestLocalization(options =>
 });
 
 // --------------------------- Swagger UI ---------------------------
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
-	app.UseSwaggerUI(c =>
-	{
-		c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-		c.RoutePrefix = string.Empty; // Makes Swagger UI available at root
-	});
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

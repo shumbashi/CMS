@@ -19,11 +19,20 @@ namespace Application.Features.User.Command
 			RuleFor(x => x.Email)
 				.NotEmpty().WithMessage(localizer["NotEmpty"])
 				.EmailAddress().WithMessage(localizer["InvalidEmail"])
-				.MaximumLength(100).WithMessage(localizer["MaxLengthIs100"]);
+				.MaximumLength(100).WithMessage(localizer["MaxLengthIs50"]);
 
 			RuleFor(x => x.Password)
 				.NotEmpty().WithMessage(localizer["NotEmpty"])
 				.MinimumLength(6).WithMessage(localizer["PasswordMinLength"]);
+
+				/*
+						RuleFor(x => x.Password)
+				.NotEmpty().WithMessage(localizer["NotEmpty"])
+				.MinimumLength(6).WithMessage(localizer["PasswordMinLength"])
+				.Matches(@"[A-Z]").WithMessage(localizer["PasswordUpperCase"]) // يحتوي على حرف كبير
+				.Matches(@"[a-z]").WithMessage(localizer["PasswordLowerCase"]) // يحتوي على حرف صغير
+				.Matches(@"[0-9]").WithMessage(localizer["PasswordNumber"]) // يحتوي على رقم
+				.Matches(@"[\W_]").WithMessage(localizer["PasswordSpecialCharacter"]); // يحتوي على رمز خاص مثل !@#$*/
 
 			RuleFor(x => x.Phone)
 				.NotEmpty().WithMessage(localizer["NotEmpty"])
