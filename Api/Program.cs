@@ -104,6 +104,45 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // --------------------------- Build App ---------------------------
 var app = builder.Build();
 
+// --------------------------- Database Migrations ---------------------------
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    var context = services.GetRequiredService<ServiceDbContext>();
+    
+    int maxRetries = 10;
+    int delay = 5000; // 5 seconds
+    
+    for (int i = 1; i <= maxRetries; i++)
+    {
+        try
+        {
+            logger.LogInformation("Attempting to apply migrations (Attempt {Attempt}/{MaxRetries})...", i, maxRetries);
+            if (context.Database.GetPendingMigrations().Any())
+            {
+                context.Database.Migrate();
+                logger.LogInformation("Migrations applied successfully.");
+            }
+            else
+            {
+                logger.LogInformation("No pending migrations found.");
+            }
+            break; // Success, exit loop
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to apply migrations on attempt {Attempt}. Retrying in {Delay}ms...", i, delay);
+            if (i == maxRetries)
+            {
+                logger.LogCritical(ex, "Could not apply migrations after {MaxRetries} attempts. Application will exit.", maxRetries);
+                throw;
+            }
+            Thread.Sleep(delay);
+        }
+    }
+}
+
 // --------------------------- API Endpoints ---------------------------
 app.MapUserEndpoints(); // Register User Endpoints
 app.MapEditorEndpoints(); // Register Editor Endpoints

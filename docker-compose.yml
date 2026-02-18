@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: cms-db
+    environment:
+      MYSQL_DATABASE: CMS
+      MYSQL_USER: admin-cms
+      MYSQL_PASSWORD: mm28@krhps
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uadmin-cms", "-pmm28@krhps"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - cms-db-data:/var/lib/mysql
+
+  api:
+    build: .
+    container_name: cms-api
+    environment:
+      - ConnectionStrings__CMS=Server=db;Port=3306;Database=CMS;UID=admin-cms;Password=mm28@krhps;CharSet=utf8mb4;
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  cms-db-data:
